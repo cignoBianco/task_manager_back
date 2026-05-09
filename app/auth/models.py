@@ -1,6 +1,7 @@
 from sqlalchemy import text, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.dao.database import Base, str_uniq
+from sqlalchemy import String
 
 
 class Role(Base):
@@ -12,7 +13,7 @@ class Role(Base):
 
 
 class User(Base):
-    phone_number: Mapped[str_uniq]
+    phone_number: Mapped[str | None] = mapped_column(String, nullable=True)
     first_name: Mapped[str]
     last_name: Mapped[str]
     email: Mapped[str_uniq]

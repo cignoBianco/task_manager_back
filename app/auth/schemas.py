@@ -10,12 +10,14 @@ class EmailModel(BaseModel):
 
 
 class UserBase(EmailModel):
-    phone_number: str = Field(description="Номер телефона в международном формате, начинающийся с '+'")
+    phone_number: str | None = Field(default=None, description="Номер телефона в международном формате, начинающийся с '+'")
     first_name: str = Field(min_length=3, max_length=50, description="Имя, от 3 до 50 символов")
     last_name: str = Field(min_length=3, max_length=50, description="Фамилия, от 3 до 50 символов")
 
     @field_validator("phone_number")
-    def validate_phone_number(cls, value: str) -> str:
+    def validate_phone_number(cls, value: str | None) -> str | None:
+        if value is None or value == "":
+            return None
         if not re.match(r'^\+\d{5,15}$', value):
             raise ValueError('Номер телефона должен начинаться с "+" и содержать от 5 до 15 цифр')
         return value
