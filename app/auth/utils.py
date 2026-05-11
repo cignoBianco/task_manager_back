@@ -47,7 +47,8 @@ def set_tokens(response: Response, user_id: int):
         value=access_token,
         httponly=True,
         secure=False, # Todo
-        samesite="lax"
+        samesite="lax",
+        max_age=60 * 60,
     )
 
     response.set_cookie(
@@ -55,7 +56,8 @@ def set_tokens(response: Response, user_id: int):
         value=refresh_token,
         httponly=True,
         secure=False, # Todo
-        samesite="lax"
+        samesite="lax",
+        max_age=60 * 60,
     )
 
 
