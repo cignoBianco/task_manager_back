@@ -66,10 +66,10 @@ async def get_current_user(
         # Общая ошибка для токенов
         raise NoJwtException
 
-    expire: str = payload.get('exp')
-    expire_time = datetime.fromtimestamp(int(expire), tz=timezone.utc)
-    if (not expire) or (expire_time < datetime.now(timezone.utc)):
-        raise TokenExpiredException
+    # expire: str = payload.get('exp')
+    # expire_time = datetime.fromtimestamp(int(expire), tz=timezone.utc)
+    # if (not expire) or (expire_time < datetime.now(timezone.utc)):
+    #     raise TokenExpiredException
 
     user_id: str = payload.get('sub')
     if not user_id:
