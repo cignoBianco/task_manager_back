@@ -156,3 +156,6 @@ class BaseDAO(Generic[T]):
         except SQLAlchemyError as e:
             logger.error(f"Ошибка при массовом обновлении: {e}")
             raise
+
+    def build_filters(model: type[BaseModel], **kwargs):
+        return model(**kwargs)

@@ -14,7 +14,9 @@ from app.exceptions import (
 
 def get_access_token(request: Request) -> str:
     """Извлекаем access_token из кук."""
+    
     token = request.cookies.get('user_access_token')
+    print("!!!", token)
     if not token:
         raise TokenNoFound
     return token
@@ -23,6 +25,7 @@ def get_access_token(request: Request) -> str:
 def get_refresh_token(request: Request) -> str:
     """Извлекаем refresh_token из кук."""
     token = request.cookies.get('user_refresh_token')
+    print("!!!2", token)
     if not token:
         raise TokenNoFound
     return token
@@ -58,6 +61,7 @@ async def get_current_user(
 ) -> User:
     """Проверяем access_token и возвращаем пользователя."""
     try:
+        print('11111', token)
         # Декодируем токен
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
     except ExpiredSignatureError:

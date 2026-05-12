@@ -49,6 +49,7 @@ def set_tokens(response: Response, user_id: int):
         secure=False, # Todo
         samesite="lax",
         max_age=60 * 60,
+        path="/"
     )
 
     response.set_cookie(
@@ -58,6 +59,7 @@ def set_tokens(response: Response, user_id: int):
         secure=False, # Todo
         samesite="lax",
         max_age=60 * 60,
+        path="/"
     )
 
 
