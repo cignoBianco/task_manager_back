@@ -20,3 +20,6 @@ class MemberResponse(BaseModel):
 class MemberFilter(BaseModel):
     workspace_id: int | None = None
     id: int | None = None
+
+class MemberUpdate(BaseModel):
+    role: MemberRole

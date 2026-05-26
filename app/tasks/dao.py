@@ -1,10 +1,16 @@
-from sqlalchemy import select
+from sqlalchemy import select, update
+from sqlalchemy.orm import joinedload
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.tasks.models import Task
+from app.dao.base import BaseDAO
 
-
-class TasksDAO:
+class TasksDAO(BaseDAO[Task]):
+    model = Task
+    # def __init__(self, session: AsyncSession):
+    #     super().__init__(Task)
+    #     self.session = session
     def __init__(self, session: AsyncSession):
+        super().__init__(session)
         self.session = session
 
     async def create(self, data: dict):
@@ -15,7 +21,12 @@ class TasksDAO:
 
     async def get_by_id(self, task_id: int):
         res = await self.session.execute(
-            select(Task).where(Task.id == task_id)
+            select(Task)
+            .options(
+                joinedload(Task.project),
+                joinedload(Task.assignee),
+            )
+            .where(Task.id == task_id)
         )
         return res.scalar_one_or_none()
 
@@ -34,7 +45,8 @@ class TasksDAO:
         if filters.get("assignee_id"):
             query = query.where(Task.assignee_id == filters["assignee_id"])
 
-        result = await self.session.execute(query)
+        result = await self.session.execute(query.options(joinedload(Task.project),
+                joinedload(Task.assignee)))
         return result.scalars().all()
 
     async def get_filtered(
@@ -63,3 +75,16 @@ class TasksDAO:
     async def get_by_workspace(self, workspace_id: int):
         from app.schemas.common_filters import TaskFilter
         return await self.get_all(TaskFilter(workspace_id=workspace_id))
+
+    async def bulk_update(self, tasks):
+        for task in tasks:
+            await self.session.execute(
+                update(Task)
+                .where(Task.id == task.id)
+                .values(
+                    status=task.status,
+                    position=task.position,
+                )
+            )
+
+        await self.session.flush()

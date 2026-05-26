@@ -3,6 +3,24 @@ from datetime import datetime
 from app.tasks.models import TaskStatus
 
 
+class AssigneeShort(BaseModel):
+    id: int
+    first_name: str
+    last_name: str
+    email: str
+
+    class Config:
+        from_attributes = True
+
+class BulkUpdateTaskItem(BaseModel):
+    id: int
+    status: TaskStatus
+    position: int
+
+
+class BulkUpdateTasks(BaseModel):
+    tasks: list[BulkUpdateTaskItem]
+
 class TaskCreate(BaseModel):
     name: str
     description: str | None = None
@@ -39,6 +57,8 @@ class TaskResponse(BaseModel):
     workspace_id: int
     project_id: int
     assignee_id: int
+    assignee: AssigneeShort
 
     class Config:
         from_attributes = True
+

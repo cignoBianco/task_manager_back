@@ -44,3 +44,6 @@ class Task(Base):
     )
 
     project = relationship("Project", back_populates="tasks")
+
+    assignee = relationship("User") # или мембер
+

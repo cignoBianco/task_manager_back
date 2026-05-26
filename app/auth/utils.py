@@ -58,7 +58,7 @@ def set_tokens(response: Response, user_id: int):
         httponly=True,
         secure=False, # Todo
         samesite="lax",
-        max_age=60 * 60,
+        max_age=60 * 60 * 24 * 7,
         path="/"
     )
 
